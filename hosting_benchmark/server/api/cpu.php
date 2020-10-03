@@ -13,7 +13,7 @@ $results = array(
 
 function testMath(&$results, $count = 99999) {
     $mathFunctions = array(
-        "abs", "acos", "asin", "atan", "bindec", "floor", "exp", "sin", "tan",
+        "abs", "acos", "asin", "atan", "decbin", "floor", "exp", "sin", "tan",
         "pi", "is_finite", "is_nan", "sqrt",
     );
     $timeStart = microtime(true);

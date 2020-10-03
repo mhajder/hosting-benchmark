@@ -3,6 +3,7 @@ import time
 
 import click
 import requests
+from terminaltables import SingleTable
 
 from hosting_benchmark.inc.taxonomies import BenchmarkResult
 from hosting_benchmark.inc.tools import (
@@ -20,6 +21,23 @@ def main(ctx: click.Context):
     :param ctx: Click context instance
     """
     click.secho("MySQL Benchmark", bold=True)
+    response = requests.get(url=f'{ctx.obj["hostname"]}/api/mysql_info.php')
+    if response.status_code != 200:
+        raise click.ClickException(
+            f'{ctx.obj["hostname"]}/api/mysql_info.php Not Found!'
+        )
+
+    data = response.json()
+    table_info = SingleTable(
+        table_data=[
+            ["Server Info", data["serverInfo"]],
+            ["Client Info", data["clientInfo"]],
+        ]
+    )
+    table_info.inner_heading_row_border = False
+    table_info.title = "MySQL Information"
+    click.echo(table_info.table)
+
     results = []
     with click.progressbar(range(ctx.obj["count"])) as bar:
         for number in bar:
